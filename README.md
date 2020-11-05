@@ -84,3 +84,18 @@ listen() has a backlog parameter. It specifies the number of unaccepted connecti
 If your server receives a lot of connection requests simultaneously, increasing the backlog value may help by setting the maximum length of the queue for pending connections. The maximum value is system dependent. For example, on Linux, see /proc/sys/net/core/somaxconn.
 
 accept() blocks and waits for an incoming connection. When a client connects, it returns a new socket object representing the connection and a tuple holding the address of the client. The tuple will contain (host, port) for IPv4 connections or (host, port, flowinfo, scopeid) for IPv6. See Socket Address Families in the reference section for details on the tuple values.
+
+One thing that’s imperative to understand is that we now have a new socket object from accept(). This is important since it’s the socket that you’ll use to communicate with the client. It’s distinct from the listening socket that the server is using to accept new connections:
+
+    conn, addr = s.accept()
+    with conn:
+        print('Connected by', addr)
+        while True:
+            data = conn.recv(1024)
+            if not data:
+                break
+            conn.sendall(data)
+
+After getting the client socket object conn from accept(), an infinite while loop is used to loop over blocking calls to conn.recv(). This reads whatever data the client sends and echoes it back using conn.sendall().
+
+If conn.recv() returns an empty bytes object, b'', then the client closed the connection and the loop is terminated. The with statement is used with conn to automatically close the socket at the end of the block.
