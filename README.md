@@ -24,7 +24,7 @@ A listening socket listens for connections from clients. connect() to establish 
 
 
 
-Echo Client and Server
+#Echo Client and Server
 
 The server will simply echo whatever it receives back to the client.
 
@@ -99,3 +99,21 @@ One thing that’s imperative to understand is that we now have a new socket obj
 After getting the client socket object conn from accept(), an infinite while loop is used to loop over blocking calls to conn.recv(). This reads whatever data the client sends and echoes it back using conn.sendall().
 
 If conn.recv() returns an empty bytes object, b'', then the client closed the connection and the loop is terminated. The with statement is used with conn to automatically close the socket at the end of the block.
+
+#Echo Client
+
+Now let’s look at the client, echo-client.py:
+
+    #!/usr/bin/env python3
+
+    import socket
+
+    HOST = '127.0.0.1'  # The server's hostname or IP address
+    PORT = 65432        # The port used by the server
+
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.connect((HOST, PORT))
+        s.sendall(b'Hello, world')
+        data = s.recv(1024)
+
+    print('Received', repr(data))
