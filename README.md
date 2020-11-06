@@ -142,3 +142,6 @@ In the server window, you should see:
     Connected by ('127.0.0.1', 64623)
 
 In the output above, the server printed the addr tuple returned from s.accept(). This is the client’s IP address and TCP port number. The port number, 64623, will most likely be different when you run it on your machine.
+
+
+Viewing Socket State
