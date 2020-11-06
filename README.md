@@ -1,4 +1,7 @@
 # Learn-more-about-sockets
+
+resource: https://realpython.com/python-sockets/
+
 The primary socket API functions and methods in this module are:
 
     socket()
