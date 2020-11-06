@@ -117,3 +117,25 @@ Now let’s look at the client, echo-client.py:
         data = s.recv(1024)
 
     print('Received', repr(data))
+
+In comparison to the server, the client is pretty simple. It creates a socket object, connects to the server and calls s.sendall() to send its message. Lastly, it calls s.recv() to read the server’s reply and then prints it. 
+
+Open a terminal or command prompt, navigate to the directory that contains your scripts, and run the server:
+
+    $ ./echo-server.py
+
+Your terminal will appear to hang. That’s because the server is blocked (suspended) in a call:
+
+    conn, addr = s.accept()
+
+It’s waiting for a client connection. Now open another terminal window or command prompt and run the client:
+
+    $ ./echo-client.py 
+    Received b'Hello, world'
+
+In the server window, you should see:
+
+    $ ./echo-server.py 
+    Connected by ('127.0.0.1', 64623)
+
+In the output above, the server printed the addr tuple returned from s.accept(). This is the client’s IP address and TCP port number. The port number, 64623, will most likely be different when you run it on your machine.
