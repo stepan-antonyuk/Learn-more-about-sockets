@@ -18,22 +18,24 @@ The primary socket API functions and methods in this module are:
     
  Transmission Control Protocol (TCP)
  
- Starting in the top left-hand column, note the API calls the server makes to setup a “listening” socket:
+API calls the server makes to setup a “listening” socket:
 
     socket()
     bind()
     listen()
     accept()
     
-A listening socket listens for connections from clients. connect() to establish a connection to the server and initiate the three-way handshake. Data is exchanged between the client and server using calls to send() and recv(). 
+A listening socket listens for connections from clients. 
+
+connect() to establish a connection to the server and initiate the three-way handshake. 
+
+Using calls to send() and recv() to exchanged between the client and server. 
 
 
 
 #Echo Client and Server
 
-The server will simply echo whatever it receives back to the client.
-
-Here’s the server, echo-server.py:
+Server echo whatr it receives back to the client.
 
     #!/usr/bin/env python3
 
@@ -55,12 +57,14 @@ Here’s the server, echo-server.py:
                 conn.sendall(data)
 
 
-socket.socket() creates a socket object that supports the context manager type. There’s no need to call s.close():
+socket.socket() creates a socket object that supports the context manager type.
+
+There’s no need to call s.close():
 
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         pass  # Use the socket object without calling s.close().
 
-socket() specify the address family and socket type. AF_INET is the Internet address family for IPv4. SOCK_STREAM is the socket type for TCP, the protocol that will be used to transport our messages in the network.
+TODO--------------->socket() specify the address family and socket type. AF_INET is the Internet address family for IPv4. SOCK_STREAM is the socket type for TCP, the protocol that will be used to transport our messages in the network.
 
 bind() is used to associate the socket with a specific network interface and port number:
 
