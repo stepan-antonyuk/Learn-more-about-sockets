@@ -147,3 +147,45 @@ In the output above, the server printed the addr tuple returned from s.accept().
 
 
 Viewing Socket State
+
+
+To see the current state of sockets on your host, use netstat. It’s available by default on macOS, Linux, and Windows.
+
+Here’s the netstat output from macOS after starting the server:
+
+    $ netstat -an
+    Active Internet connections (including servers)
+    Proto Recv-Q Send-Q  Local Address          Foreign Address        (state)
+    tcp4       0      0  127.0.0.1.65432        *.*                    LISTEN
+
+Notice that Local Address is 127.0.0.1.65432. If echo-server.py had used HOST = '' instead of HOST = '127.0.0.1', netstat would show this:
+
+    $ netstat -an
+    Active Internet connections (including servers)
+    Proto Recv-Q Send-Q  Local Address          Foreign Address        (state)
+    tcp4       0      0  *.65432                *.*                    LISTEN
+
+Local Address is *.65432, which means all available host interfaces that support the address family will be used to accept incoming connections. In this example, in the call to socket(), socket.AF_INET was used (IPv4). You can see this in the Proto column: tcp4.
+
+I’ve trimmed the output above to show the echo server only. You’ll likely see much more output, depending on the system you’re running it on. The things to notice are the columns Proto, Local Address, and (state). In the last example above, netstat shows the echo server is using an IPv4 TCP socket (tcp4), on port 65432 on all interfaces (*.65432), and it’s in the listening state (LISTEN).
+
+Another way to see this, along with additional helpful information, is to use lsof (list open files). It’s available by default on macOS and can be installed on Linux using your package manager, if it’s not already:
+
+    $ lsof -i -n
+    COMMAND     PID   USER   FD   TYPE   DEVICE SIZE/OFF NODE NAME
+    Python    67982 nathan    3u  IPv4 0xecf272      0t0  TCP *:65432 (LISTEN)
+
+lsof gives you the COMMAND, PID (process id), and USER (user id) of open Internet sockets when used with the -i option. Above is the echo server process.
+
+netstat and lsof have a lot of options available and differ depending on the OS you’re running them on. Check the man page or documentation for both. They’re definitely worth spending a little time with and getting to know. You’ll be rewarded. On macOS and Linux, use man netstat and man lsof. For Windows, use netstat /?.
+
+Here’s a common error you’ll see when a connection attempt is made to a port with no listening socket:
+
+    $ ./echo-client.py 
+    Traceback (most recent call last):
+      File "./echo-client.py", line 9, in <module>
+        s.connect((HOST, PORT))
+    ConnectionRefusedError: [Errno 61] Connection refused
+
+Either the specified port number is wrong or the server isn’t running. Or maybe there’s a firewall in the path that’s blocking the connection, which can be easy to forget about. You may also see the error Connection timed out. Get a firewall rule added that allows the client to connect to the TCP port!
+
