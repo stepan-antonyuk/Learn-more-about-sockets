@@ -81,14 +81,14 @@ host can be a hostname, IP address, or empty string. If an IP address is used, h
 
 port should be an integer from 1-65535 (0 is reserved). It’s the TCP port number to accept connections on from clients. Some systems may require superuser privileges if the port is < 1024.
 
-It could be anything. The first time you run your application, it might be the address 10.1.2.3. The next time it’s a different address, 192.168.0.1. The third time, it could be 172.16.7.8, and so on.
+The first time you run your application, it might be the address 10.1.2.3. The next time it’s a different address, 192.168.0.1. The third time, it could be 172.16.7.8, and so on.
 
 Continuing with the server example, listen() enables a server to accept() connections. It makes it a “listening” socket:
 
     s.listen()
     conn, addr = s.accept()
 
-listen() has a backlog parameter. It specifies the number of unaccepted connections that the system will allow before refusing new connections. Starting in Python 3.5, it’s optional. If not specified, a default backlog value is chosen.
+listen() has a backlog parameter, it specifies the number of unaccepted connections that the system will allow before refusing new connections. Starting in Python 3.5, it’s optional. If not specified, a default backlog value is chosen.
 
 If your server receives a lot of connection requests simultaneously, increasing the backlog value may help by setting the maximum length of the queue for pending connections. The maximum value is system dependent. For example, on Linux, see /proc/sys/net/core/somaxconn.
 
