@@ -203,4 +203,4 @@ If you have an application server that uses its own private database. If it’s 
 
 When you use an IP address other than 127.0.0.1 or ::1 in your applications, it’s probably bound to an Ethernet interface that’s connected to an external network. This is your gateway to other hosts outside of your “localhost” kingdom:
 
-Be careful out there. It’s a nasty, cruel world. Be sure to read the section Using Hostnames before venturing from the safe confines of “localhost.” There’s a security note that applies even if you’re not using hostnames and using IP addresses only.
+Be sure to read the section Using Hostnames before venturing from the safe confines of “localhost.” There’s a security note that applies even if you’re not using hostnames and using IP addresses only.
