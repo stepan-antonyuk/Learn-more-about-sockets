@@ -208,3 +208,20 @@ Be sure to read the section Using Hostnames before venturing from the safe confi
 Handling Multiple Connections
 
 The echo server definitely has its limitations. The biggest being that it serves only one client and then exits. The echo client has this limitation too, but there’s an additional problem. When the client makes the following call, it’s possible that s.recv() will return only one byte, b'H' from b'Hello, world':
+
+    data = s.recv(1024)
+
+The bufsize argument of 1024 used above is the maximum amount of data to be received at once. It doesn’t mean that recv() will return 1024 bytes.
+
+send() also behaves this way. send() returns the number of bytes sent, which may be less than the size of the data passed in. You’re responsible for checking this and calling send() as many times as needed to send all of the data:
+
+        “Applications are responsible for checking that all data has been sent; if only some of the data was transmitted, the application needs to attempt     delivery of the remaining data.” (Source)
+
+We avoided having to do this by using sendall():
+
+        “Unlike send(), this method continues to send data from bytes until either all data has been sent or an error occurs. None is returned on success.” (Source)
+
+We have two problems at this point:
+
+        How do we handle multiple connections concurrently?
+        We need to call send() and recv() until all data is sent or received.
